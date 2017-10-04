@@ -11,12 +11,13 @@ typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 open class PreconditionContext(
         private val evaluate: EvaluationMethod
 ) :
-        IntPreconditions,
+        CollectionPreconditions,
+        ComparablePreconditions,
         DoublePreconditions,
+        IntPreconditions,
         LongPreconditions,
         StringPreconditions,
-        CollectionPreconditions,
-        ComparablePreconditions
+        TypePreconditions
 {
 
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
