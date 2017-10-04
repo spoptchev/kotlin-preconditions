@@ -10,7 +10,14 @@ typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 @PreconditionDSLMarker
 open class PreconditionContext(
         private val evaluate: EvaluationMethod
-) : IntPreconditions, DoublePreconditions, LongPreconditions, StringPreconditions, CollectionPreconditions {
+) :
+        IntPreconditions,
+        DoublePreconditions,
+        LongPreconditions,
+        StringPreconditions,
+        CollectionPreconditions,
+        ComparablePreconditions
+{
 
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
 
