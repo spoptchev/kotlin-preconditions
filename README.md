@@ -1,4 +1,5 @@
 # Kotlin Preconditions
+[![Build Status](https://travis-ci.org/spoptchev/kotlin-preconditions.svg?branch=master)](https://travis-ci.org/spoptchev/kotlin-preconditions)
 
 #### Precondition error checking in kotlin
 
