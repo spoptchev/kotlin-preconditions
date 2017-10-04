@@ -1,8 +1,6 @@
 package com.spas.kotlin.preconditions
 
-import com.spas.kotlin.preconditions.conditions.IntPreconditions
-import com.spas.kotlin.preconditions.conditions.Precondition
-import com.spas.kotlin.preconditions.conditions.StringPreconditions
+import com.spas.kotlin.preconditions.conditions.*
 
 @DslMarker
 annotation class PreconditionDSLMarker
@@ -12,7 +10,7 @@ typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 @PreconditionDSLMarker
 open class PreconditionContext(
         private val evaluate: EvaluationMethod
-) : IntPreconditions, StringPreconditions {
+) : IntPreconditions, DoublePreconditions, LongPreconditions, StringPreconditions {
 
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
 
