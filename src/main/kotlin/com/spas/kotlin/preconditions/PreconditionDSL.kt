@@ -13,6 +13,7 @@ open class PreconditionContext(
 ) :
         CollectionPreconditions,
         ComparablePreconditions,
+        MapPreconditions,
         StringPreconditions,
         TypePreconditions
 {

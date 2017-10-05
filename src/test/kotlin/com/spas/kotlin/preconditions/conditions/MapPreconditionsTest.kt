@@ -10,7 +10,6 @@ class MapPreconditionsTest {
 
     private val precondition = object : MapPreconditions {}
 
-
     @Test fun `test haveKey valid`() {
         val result = precondition.haveKey(1).test(mapOf(1 to "one"))
 
