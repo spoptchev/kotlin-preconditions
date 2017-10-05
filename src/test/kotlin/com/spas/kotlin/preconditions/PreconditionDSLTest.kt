@@ -15,6 +15,7 @@ class PreconditionDSLTest {
     @Test(expected = IllegalArgumentException::class) fun `test toBe`() {
         require {
             1 toBe lt(0)
+            1 toBe between(1..2)
         }
     }
 
