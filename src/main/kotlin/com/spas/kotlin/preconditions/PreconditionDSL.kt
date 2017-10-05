@@ -21,8 +21,21 @@ open class PreconditionContext(
 
     infix fun <T> T.toBe(precondition: Precondition<T>): T = precondition
             .test(this)
-            .run { evaluate(valid) { message } }
+            .run { evaluate(valid, lazyMessage) }
             .let { this }
+
+    infix fun <T> T.notTo(precondition: Precondition<T>): T = notToBe(precondition)
+    infix fun <T> T.notToBe(precondition: Precondition<T>): T = precondition
+            .test(this)
+            .run { evaluate(!valid) { negateMessage(lazyMessage()) } }
+            .let { this }
+
+    private fun negateMessage(message: String) =
+            message.replace(NEGATION_REGEX, "$1not $2")
+
+    companion object {
+        @JvmField val NEGATION_REGEX = Regex("(^.*?)(to.*$)")
+    }
 
 }
 

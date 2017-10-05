@@ -19,6 +19,22 @@ class PreconditionDSLTest {
         }
     }
 
+    @Test fun `test notTo`() {
+        try {
+            check { "x" notTo equal("y") }
+        } catch (e: IllegalStateException) {
+            assertEquals("expected x not to equal y", e.message)
+        }
+    }
+
+    @Test fun `test notToBe`() {
+        try {
+            require { 1 notToBe gt(0) }
+        } catch (e: IllegalArgumentException) {
+            assertEquals("expected 1 not to be > 0", e.message)
+        }
+    }
+
     @Test fun `test success`() {
         var result: Int = 0
 

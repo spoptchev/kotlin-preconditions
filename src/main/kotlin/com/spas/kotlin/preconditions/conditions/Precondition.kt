@@ -7,4 +7,6 @@ interface Precondition<in T> {
 
 }
 
-data class Result(val valid: Boolean, val message: String)
+data class Result(val valid: Boolean, val lazyMessage: () -> String)
+
+internal fun verify(valid: Boolean, lazyMessage: () -> String): Result = Result(valid, lazyMessage)
