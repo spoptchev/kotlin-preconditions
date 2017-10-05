@@ -13,9 +13,6 @@ open class PreconditionContext(
 ) :
         CollectionPreconditions,
         ComparablePreconditions,
-        DoublePreconditions,
-        IntPreconditions,
-        LongPreconditions,
         StringPreconditions,
         TypePreconditions
 {

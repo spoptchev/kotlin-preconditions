@@ -72,4 +72,20 @@ class ComparablePreconditionsTest {
         assertEquals(result, expectedResult)
     }
 
+    @Test
+    fun `test between valid`() {
+        val result = precondition.between(2.0..3.0).test(2.5)
+        val expectedResult = Result(true, "expected 2.5 to be in 2.0..3.0")
+
+        assertEquals(result, expectedResult)
+    }
+
+    @Test
+    fun `test between invalid`() {
+        val result = precondition.between(2.0..3.0).test(1.0)
+        val expectedResult = Result(false, "expected 1.0 to be in 2.0..3.0")
+
+        assertEquals(result, expectedResult)
+    }
+
 }
