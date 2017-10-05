@@ -2,19 +2,20 @@ package com.spas.kotlin.preconditions.conditions
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 class PreconditionTest {
 
     val precondition = object : Precondition<String> {
-        override fun test(value: String): Result = Result(true, value)
+        override fun test(value: String): Result = verify(true) { value }
     }
 
     @Test fun `test test result`() {
         val result = precondition.test("hello")
-        val expectedResult = Result(true, "hello")
 
-        assertEquals(result, expectedResult)
+        assertTrue(result.valid)
+        assertEquals("hello", result.lazyMessage())
     }
 
 }
