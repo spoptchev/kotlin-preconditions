@@ -13,7 +13,6 @@ class PreconditionTest {
 
     @Test fun `test test result`() {
         val result = precondition.test("hello")
-        val expectedResult = verify(true) { "hello" }
 
         assertTrue(result.valid)
         assertEquals("hello", result.lazyMessage())
