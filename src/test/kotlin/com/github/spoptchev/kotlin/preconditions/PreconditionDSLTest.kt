@@ -1,4 +1,4 @@
-package com.spas.kotlin.preconditions
+package com.github.spoptchev.kotlin.preconditions
 
 import org.junit.Test
 import kotlin.test.assertEquals

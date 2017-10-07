@@ -1,4 +1,4 @@
-package com.spas.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.conditions
 
 
 interface CollectionPreconditions {

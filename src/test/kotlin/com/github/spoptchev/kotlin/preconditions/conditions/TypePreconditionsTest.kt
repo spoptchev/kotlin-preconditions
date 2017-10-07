@@ -1,5 +1,6 @@
-package com.spas.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.conditions
 
+import com.github.spoptchev.kotlin.preconditions.conditions.TypePreconditions
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
