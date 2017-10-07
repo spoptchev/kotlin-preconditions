@@ -1,7 +1,7 @@
 package com.github.spoptchev.kotlin.preconditions.conditions
 
 
-interface TypePreconditions {
+interface ObjectPreconditions {
 
     fun <T> beNull(fieldName: String? = null): Precondition<T> = object : Precondition<T> {
         override fun test(value: T): Result = verify(value == null) {

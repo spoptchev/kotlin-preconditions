@@ -1,8 +1,5 @@
 package com.github.spoptchev.kotlin.preconditions.conditions
 
-import com.github.spoptchev.kotlin.preconditions.conditions.Precondition
-import com.github.spoptchev.kotlin.preconditions.conditions.Result
-import com.github.spoptchev.kotlin.preconditions.conditions.verify
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
