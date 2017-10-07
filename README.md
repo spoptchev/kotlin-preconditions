@@ -22,3 +22,23 @@ require {
 
 If any of the preconditions are not met then `check` will throw an
 `IllegalStateException` and `require` will throw an `IllegalArgumentException`.
+
+
+#### Installation
+
+Maven:
+
+```
+<dependency>
+  <groupId>com.github.spoptchev</groupId>
+  <artifactId>kotlin-preconditions</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
+Gradle:
+
+```
+compile 'com.github.spoptchev:kotlin-preconditions:0.1.0'
+```
+
