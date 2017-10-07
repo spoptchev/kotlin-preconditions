@@ -1,11 +1,11 @@
-package com.spas.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.conditions
 
 
 interface TypePreconditions {
 
     fun <T> beNull(fieldName: String? = null): Precondition<T> = object : Precondition<T> {
         override fun test(value: T): Result = verify(value == null) {
-            val expectation = when(fieldName.isNullOrEmpty()) {
+            val expectation = when (fieldName.isNullOrEmpty()) {
                 true -> "$value"
                 else -> "field '$fieldName'"
             }

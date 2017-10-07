@@ -1,6 +1,6 @@
-package com.spas.kotlin.preconditions
+package com.github.spoptchev.kotlin.preconditions
 
-import com.spas.kotlin.preconditions.conditions.*
+import com.github.spoptchev.kotlin.preconditions.conditions.*
 
 @DslMarker
 annotation class PreconditionDSLMarker
