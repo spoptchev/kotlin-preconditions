@@ -1,15 +1,14 @@
 package com.github.spoptchev.kotlin.preconditions.conditions
 
-import com.github.spoptchev.kotlin.preconditions.conditions.TypePreconditions
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class TypePreconditionsTest {
+class ObjectPreconditionsTest {
 
-    private val precondition = object : TypePreconditions {}
+    private val precondition = object : ObjectPreconditions {}
 
     @Test fun `test beNull valid`() {
         val result = precondition.beNull<String?>().test(null)

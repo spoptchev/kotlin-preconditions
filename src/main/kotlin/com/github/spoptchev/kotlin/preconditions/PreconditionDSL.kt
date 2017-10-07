@@ -15,7 +15,7 @@ open class PreconditionContext(
         ComparablePreconditions,
         MapPreconditions,
         StringPreconditions,
-        TypePreconditions
+        ObjectPreconditions
 {
 
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
