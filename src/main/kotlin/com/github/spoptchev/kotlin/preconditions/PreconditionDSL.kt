@@ -1,6 +1,6 @@
 package com.github.spoptchev.kotlin.preconditions
 
-import com.github.spoptchev.kotlin.preconditions.conditions.*
+import com.github.spoptchev.kotlin.preconditions.matcher.*
 
 @DslMarker
 annotation class PreconditionDSLMarker
@@ -11,32 +11,24 @@ typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 open class PreconditionContext(
         private val evaluate: EvaluationMethod
 ) :
-        CollectionPreconditions,
-        ComparablePreconditions,
-        MapPreconditions,
-        StringPreconditions,
-        TypePreconditions
+        CollectionMatcher,
+        ComparableMatcher,
+        MapMatcher,
+        StringMatcher,
+        ObjectMatcher
 {
+
+    fun <T> not(precondition: Precondition<T>) = NotPrecondition(precondition)
 
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
 
-    infix fun <T> T.toBe(precondition: Precondition<T>): T = precondition
-            .test(this)
-            .run { evaluate(valid, lazyMessage) }
+    infix fun <T> T.toBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
+            .let { evaluate(it.valid, it.lazyMessage) }
             .let { this }
 
     infix fun <T> T.notTo(precondition: Precondition<T>): T = notToBe(precondition)
-    infix fun <T> T.notToBe(precondition: Precondition<T>): T = precondition
-            .test(this)
-            .run { evaluate(!valid) { negateMessage(lazyMessage()) } }
-            .let { this }
 
-    private fun negateMessage(message: String) =
-            message.replace(NEGATION_REGEX, "$1not $2")
-
-    companion object {
-        @JvmField val NEGATION_REGEX = Regex("(^.*?)(to.*$)")
-    }
+    infix fun <T> T.notToBe(precondition: Precondition<T>): T = toBe(not(precondition))
 
 }
 

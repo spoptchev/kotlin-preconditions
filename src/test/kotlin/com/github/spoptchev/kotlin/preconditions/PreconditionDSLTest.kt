@@ -39,7 +39,7 @@ class PreconditionDSLTest {
         var result: Int = 0
 
         require {
-            result = 1 toBe lt(2)
+            result = 1 toBe not(lt(0)).or(not(lt(1)))
         }
 
         assertEquals(result, 1)
@@ -50,8 +50,7 @@ class PreconditionDSLTest {
 
         require {
             list to haveSize(2)
-            list to contain(2)
-            list notToBe empty()
+            list to contain(2).and(haveSize(2))
             list to containAll(1, 2)
             list toBe sorted()
         }
@@ -93,7 +92,6 @@ class PreconditionDSLTest {
         val value = "hello"
 
         require {
-            value notTo beNull()
             value to equal("hello")
             value toBe sameInstanceAs("hello")
         }
