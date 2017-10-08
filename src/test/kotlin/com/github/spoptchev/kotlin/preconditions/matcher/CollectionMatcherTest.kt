@@ -25,7 +25,7 @@ class CollectionMatcherTest {
                 .test(listOf("1", "2"))
 
         assertFalse(result.valid)
-        assertEquals("expected collection to have size 3 but has size 2", result.lazyMessage())
+        assertEquals("expected [1, 2] to have size 3 but has size 2", result.lazyMessage())
     }
 
     @Test fun `test contain valid`() {
@@ -42,7 +42,7 @@ class CollectionMatcherTest {
                 .test(listOf("1", "2"))
 
         assertFalse(result.valid)
-        assertEquals("expected collection [1, 2] to contain element 3", result.lazyMessage())
+        assertEquals("expected [1, 2] to contain element 3", result.lazyMessage())
     }
 
     @Test fun `test empty valid`() {
@@ -59,7 +59,7 @@ class CollectionMatcherTest {
                 .test(listOf("1", "2"))
 
         assertFalse(result.valid)
-        assertEquals("expected collection [1, 2] to be empty", result.lazyMessage())
+        assertEquals("expected [1, 2] to be empty", result.lazyMessage())
     }
 
     @Test fun `test containAll valid`() {
@@ -76,7 +76,7 @@ class CollectionMatcherTest {
                 .test(listOf("3", "2", "1"))
 
         assertFalse(result.valid)
-        assertEquals("expected collection [3, 2, 1] to contain all values of [1, 2, 4]", result.lazyMessage())
+        assertEquals("expected [3, 2, 1] to contain all values of [1, 2, 4]", result.lazyMessage())
     }
 
     @Test fun `test sorted valid`() {
@@ -93,7 +93,7 @@ class CollectionMatcherTest {
                 .test(listOf(1, 3, 2))
 
         assertFalse(result.valid)
-        assertEquals("expected collection [1, 3, 2] to be sorted", result.lazyMessage())
+        assertEquals("expected [1, 3, 2] to be sorted", result.lazyMessage())
     }
 
 }

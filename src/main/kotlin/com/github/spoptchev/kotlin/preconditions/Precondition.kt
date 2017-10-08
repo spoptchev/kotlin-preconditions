@@ -4,12 +4,19 @@ data class Result(val valid: Boolean, val lazyMessage: () -> String) {
 
     fun negate() = copy(valid = !valid, lazyMessage = negatedLazyMessage(lazyMessage()))
 
+    fun label(label: String) = copy(valid = !valid, lazyMessage = labelLazyMessage(label, lazyMessage()))
+
+    private fun labelLazyMessage(label: String, message: String) = {
+        message.replace(LABEL_REGEX, "$1 $label with value(s)$2")
+    }
+
     private fun negatedLazyMessage(message: String) = {
         message.replace(NEGATION_REGEX, "$1not $2")
     }
 
     companion object {
         @JvmField val NEGATION_REGEX = Regex("(^.*?)(to.*$)")
+        @JvmField val LABEL_REGEX = Regex("(^expected)(.*$)")
     }
 
 }
