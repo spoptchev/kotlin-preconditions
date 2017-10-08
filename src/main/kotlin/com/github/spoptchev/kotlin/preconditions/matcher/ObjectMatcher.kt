@@ -16,8 +16,8 @@ interface ObjectMatcher {
         }
     }
 
-    fun <T> equal(other: T) = object : Matcher<T>() {
-        override fun test(value: T) = verify(value == other) {
+    fun <T> equal(other: T) = object : Matcher<Any>() {
+        override fun test(value: Any) = verify(value == other) {
             "expected $value to be equal to $other"
         }
     }

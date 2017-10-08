@@ -18,15 +18,38 @@ open class PreconditionContext(
         ObjectMatcher
 {
 
-    infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
+    inline fun <reified T> Precondition<T>.and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
+    inline fun <reified T> Precondition<T>.or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
+    inline fun <reified T> not(precondition: Precondition<T>) = NotPrecondition(precondition)
 
-    infix fun <T> T.toBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
+    infix fun <T> T.should(precondition: Precondition<T>): T = shouldBe(precondition)
+
+    infix fun <T> T.shouldBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
             .let { evaluate(it.valid, it.lazyMessage) }
             .let { this }
 
-    inline infix fun <reified T> T.notTo(precondition: Precondition<T>): T = notToBe(precondition)
+    inline infix fun <reified T> T.shouldNot(precondition: Precondition<T>): T = shouldNotBe(precondition)
+    inline infix fun <reified T> T.shouldNotBe(precondition: Precondition<T>): T = shouldBe(not(precondition))
 
-    inline infix fun <reified T> T.notToBe(precondition: Precondition<T>): T = toBe(not(precondition))
+    private fun <T> T.evalPrecondition(precondition: Precondition<T>): Result = when(precondition) {
+
+        is Matcher<T> ->
+            precondition.test(this)
+
+        is AndPrecondition<T> -> {
+            val left = evalPrecondition(precondition.left)
+            if (left.valid) evalPrecondition(precondition.right) else left
+        }
+
+        is OrPrecondition<T> -> {
+            val left = evalPrecondition(precondition.left)
+            if (left.valid) left else evalPrecondition(precondition.right)
+        }
+
+        is NotPrecondition<T> ->
+            evalPrecondition(precondition.precondition).let(Result::negate)
+
+    }
 
 }
 
