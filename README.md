@@ -9,11 +9,11 @@ kotlin-preconditions provides a powerful DSL for defining preconditions:
 
 ```kotlin
 check {
-    1 toBe lt(0)
+    1 shouldBe lt(0)
 }
 
 require {
-    "hello" to match("not")
+    "hello" should match("not")
 }
 ```
 
@@ -26,7 +26,7 @@ Compose your preconditions the way you like it:
 val list = listOf(1, 2)
 
 require {
-    list to contain(3).or(contain(1)).and(not(haveSize(3)))
+    list should contain(3).or(contain(1)).and(not(haveSize(3)))
 }
 ```
 
@@ -36,11 +36,11 @@ require {
 
 ```kotlin
 require {
-    "hello" to startWith("he")
-    "hello" to include("ll")
-    "hello" to match("hello")
-    "hello" to endWith("lo")
-    "hello" to haveLength(5)
+    "hello" should startWith("he")
+    "hello" should include("ll")
+    "hello" should match("hello")
+    "hello" should endWith("lo")
+    "hello" should haveLength(5)
 }
 ```
 
@@ -50,11 +50,11 @@ require {
 val list = listOf(1, 2)
 
 require {
-    list to haveSize(2)
-    list to contain(2)
-    list notToBe empty()
-    list to containAll(1, 2)
-    list toBe sorted()
+    list should haveSize(2)
+    list should contain(2)
+    list shouldNotBe empty()
+    list should containAll(1, 2)
+    list shouldBe sorted()
 }
 ```
 
@@ -62,11 +62,11 @@ require {
 
 ```kotlin
 require {
-    1 toBe lt(2)
-    1 toBe lte(1)
-    1 toBe gt(0)
-    1 toBe gte(1)
-    1 toBe between(0..2)
+    1 shouldBe lt(2)
+    1 shouldBe lte(1)
+    1 shouldBe gt(0)
+    1 shouldBe gte(1)
+    1 shouldBe between(0..2)
 }
 ```
 
@@ -76,9 +76,9 @@ require {
 val map = mapOf(1 to "1")
 
 require {
-    map to haveKey(1)
-    map to haveValue("1")
-    map to contain(1, "1")
+    map should haveKey(1)
+    map should haveValue("1")
+    map should contain(1, "1")
 }
 ```
 
@@ -88,9 +88,9 @@ require {
 val value = "hello"
 
 require {
-    value notTo beNull()
-    value to equal("hello")
-    value toBe sameInstanceAs("hello")
+    value shouldNot beNull()
+    value should equal("hello")
+    value shouldBe sameInstanceAs("hello")
 }
 ```
 
@@ -100,7 +100,7 @@ require {
 val list = listOf(1, 2)
 
 require {
-    list to contain(3).or(contain(1)).and(not(haveSize(3)))
+    list should contain(3).or(contain(1)).and(not(haveSize(3)))
 }
 ```
 
