@@ -112,13 +112,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:1.0.0'
+compile 'com.github.spoptchev:kotlin-preconditions:2.0.0'
 ```
 
