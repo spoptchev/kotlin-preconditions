@@ -1,5 +1,4 @@
-# Kotlin Preconditions
-[![Build Status](https://travis-ci.org/spoptchev/kotlin-preconditions.svg?branch=master)](https://travis-ci.org/spoptchev/kotlin-preconditions)
+# Kotlin Preconditions [![Build Status](https://travis-ci.org/spoptchev/kotlin-preconditions.svg?branch=master)](https://travis-ci.org/spoptchev/kotlin-preconditions)
 
 kotlin-preconditions will assist you in ensuring all of your invariants are met
 before an operation is executed.
@@ -20,6 +19,16 @@ require {
 
 If any of the preconditions are not met then `check` will throw an
 `IllegalStateException` and `require` will throw an `IllegalArgumentException`.
+
+Compose your preconditions the way you like it:
+
+```kotlin
+val list = listOf(1, 2)
+
+require {
+    list to contain(3).or(contain(1)).and(not(haveSize(3)))
+}
+```
 
 ### API Overview
 
@@ -82,6 +91,16 @@ require {
     value notTo beNull()
     value to equal("hello")
     value toBe sameInstanceAs("hello")
+}
+```
+
+#### Composed preconditions
+
+```kotlin
+val list = listOf(1, 2)
+
+require {
+    list to contain(3).or(contain(1)).and(not(haveSize(3)))
 }
 ```
 

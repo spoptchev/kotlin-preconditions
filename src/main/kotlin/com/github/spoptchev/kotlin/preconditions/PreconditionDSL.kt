@@ -18,17 +18,15 @@ open class PreconditionContext(
         ObjectMatcher
 {
 
-    fun <T> not(precondition: Precondition<T>) = NotPrecondition(precondition)
-
     infix fun <T> T.to(precondition: Precondition<T>): T = toBe(precondition)
 
     infix fun <T> T.toBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
             .let { evaluate(it.valid, it.lazyMessage) }
             .let { this }
 
-    infix fun <T> T.notTo(precondition: Precondition<T>): T = notToBe(precondition)
+    inline infix fun <reified T> T.notTo(precondition: Precondition<T>): T = notToBe(precondition)
 
-    infix fun <T> T.notToBe(precondition: Precondition<T>): T = toBe(not(precondition))
+    inline infix fun <reified T> T.notToBe(precondition: Precondition<T>): T = toBe(not(precondition))
 
 }
 

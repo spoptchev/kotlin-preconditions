@@ -50,7 +50,7 @@ class PreconditionDSLTest {
 
         require {
             list to haveSize(2)
-            list to contain(2).and(haveSize(2))
+            list to contain(1).or(contain(1)).and(not(haveSize(3)))
             list to containAll(1, 2)
             list toBe sorted()
         }
@@ -80,7 +80,7 @@ class PreconditionDSLTest {
         val value = "hello"
 
         require {
-            value to startWith("he")
+            value to startWith("he").and(haveLength(5)).and(not(include("io")))
             value to include("ll")
             value to match("hello")
             value to endWith("lo")

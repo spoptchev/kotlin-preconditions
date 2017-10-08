@@ -17,13 +17,9 @@ data class Result(val valid: Boolean, val lazyMessage: () -> String) {
 
 sealed class Precondition<in T>
 
-abstract class Matcher<T> : Precondition<T>() {
+abstract class Matcher<in T> : Precondition<T>() {
 
     abstract fun test(value: T): Result
-
-    fun and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
-
-    fun or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
 
     protected fun verify(valid: Boolean, lazyMessage: () -> String) = Result(valid, lazyMessage)
 
@@ -33,13 +29,11 @@ class AndPrecondition<in T>(val left: Precondition<T>, val right: Precondition<T
 
 class OrPrecondition<in T>(val left: Precondition<T>, val right: Precondition<T>) : Precondition<T>()
 
-class NotPrecondition<T>(val precondition: Precondition<T>) : Precondition<T>() {
+class NotPrecondition<in T>(val precondition: Precondition<T>) : Precondition<T>()
 
-    fun and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
-
-    fun or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
-
-}
+inline fun <reified T> Precondition<T>.and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
+inline fun <reified T> Precondition<T>.or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
+inline fun <reified T> not(precondition: Precondition<T>) = NotPrecondition(precondition)
 
 internal fun <T> T.evalPrecondition(precondition: Precondition<T>): Result = when(precondition) {
 
