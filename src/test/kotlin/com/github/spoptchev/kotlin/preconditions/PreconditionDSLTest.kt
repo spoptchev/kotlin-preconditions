@@ -24,9 +24,11 @@ class PreconditionDSLTest {
 
     @Test fun `test shouldNot`() {
         try {
-            check { "x" shouldNot equal("y") }
+            check {
+                withLabel("ShouldNot") { "x" shouldNot equal("y") }
+            }
         } catch (e: IllegalStateException) {
-            assertEquals("expected x not to equal y", e.message)
+            assertEquals("expected ShouldNot with value(s) x not to be equal to y", e.message)
         }
     }
 

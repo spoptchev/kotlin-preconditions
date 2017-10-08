@@ -5,14 +5,9 @@ import com.github.spoptchev.kotlin.preconditions.Matcher
 
 interface ObjectMatcher {
 
-    fun <T> beNull(label: String? = null) = object : Matcher<T>() {
+    fun <T> beNull() = object : Matcher<T>() {
         override fun test(value: T) = verify(value == null) {
-            val expectation = when (label.isNullOrEmpty()) {
-                true -> "$value"
-                else -> "field '$label'"
-            }
-
-            "expected $expectation to be null"
+            "expected $value to be null"
         }
     }
 

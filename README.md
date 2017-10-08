@@ -104,6 +104,16 @@ require {
 }
 ```
 
+#### Labels
+
+```kotlin
+val numbers = listOf(1, 2)
+
+require {
+    withLabel("Numbers") { numbers should contain(3).or(contain(1)).and(not(haveSize(3))) }
+}
+```
+
 ### Installation
 
 Maven:
@@ -112,13 +122,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:2.0.0'
+compile 'com.github.spoptchev:kotlin-preconditions:3.0.0'
 ```
 
