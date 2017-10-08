@@ -95,6 +95,7 @@ class PreconditionDSLTest {
         val value = "hello"
 
         require {
+            value shouldNot beNull()
             value shouldBe equal("hello")
             value shouldBe sameInstanceAs("hello")
         }
