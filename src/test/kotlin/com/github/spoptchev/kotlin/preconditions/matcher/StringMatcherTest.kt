@@ -1,76 +1,75 @@
-package com.github.spoptchev.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.matcher
 
-import com.github.spoptchev.kotlin.preconditions.conditions.StringPreconditions
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class StringPreconditionsTest {
+class StringMatcherTest {
 
-    private val precondition = object : StringPreconditions {}
+    private val matcher = object : StringMatcher {}
 
     @Test fun `test match valid`() {
-        val result = precondition.match("hello").test("hello")
+        val result = matcher.match("hello").test("hello")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test match invalid`() {
-        val result = precondition.match("invalid").test("something")
+        val result = matcher.match("invalid").test("something")
 
         assertFalse(result.valid)
         assertEquals("expected 'something' to match 'invalid'", result.lazyMessage())
     }
 
     @Test fun `test startWith valid`() {
-        val result = precondition.startWith("he").test("hello")
+        val result = matcher.startWith("he").test("hello")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test startWith invalid`() {
-        val result = precondition.startWith("eh").test("hello")
+        val result = matcher.startWith("eh").test("hello")
 
         assertFalse(result.valid)
         assertEquals("expected 'hello' to start with 'eh'", result.lazyMessage())
     }
 
     @Test fun `test include valid`() {
-        val result = precondition.include("el").test("hello")
+        val result = matcher.include("el").test("hello")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test include invalid`() {
-        val result = precondition.include("le").test("hello")
+        val result = matcher.include("le").test("hello")
 
         assertFalse(result.valid)
         assertEquals("expected 'hello' to include 'le'", result.lazyMessage())
     }
 
     @Test fun `test endWith valid`() {
-        val result = precondition.endWith("lo").test("hello")
+        val result = matcher.endWith("lo").test("hello")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test endWith invalid`() {
-        val result = precondition.endWith("ol").test("hello")
+        val result = matcher.endWith("ol").test("hello")
 
         assertFalse(result.valid)
         assertEquals("expected 'hello' to end with 'ol'", result.lazyMessage())
     }
 
     @Test fun `test haveLength valid`() {
-        val result = precondition.haveLength(5).test("hello")
+        val result = matcher.haveLength(5).test("hello")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test haveLength invalid`() {
-        val result = precondition.haveLength(2).test("hello")
+        val result = matcher.haveLength(2).test("hello")
 
         assertEquals("expected 'hello' to have length 2", result.lazyMessage())
     }

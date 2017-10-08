@@ -1,4 +1,4 @@
-package com.github.spoptchev.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.matcher
 
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -6,44 +6,44 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class ObjectPreconditionsTest {
+class ObjectMatcherTest {
 
-    private val precondition = object : ObjectPreconditions {}
+    private val matcher = object : ObjectMatcher {}
 
     @Test fun `test beNull valid`() {
-        val result = precondition.beNull<String?>().test(null)
+        val result = matcher.beNull<String?>().test(null)
 
         assertTrue(result.valid)
     }
 
     @Test fun `test beNull invalid`() {
-        val result = precondition.beNull<String?>().test("test")
+        val result = matcher.beNull<String?>().test("test")
 
         assertFalse(result.valid)
         assertEquals("expected test to be null", result.lazyMessage())
     }
 
     @Test fun `test equal valid`() {
-        val result = precondition.equal("x").test("x")
+        val result = matcher.equal("x").test("x")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test equal invalid`() {
-        val result = precondition.equal("x").test("y")
+        val result = matcher.equal("x").test("y")
 
         assertFalse(result.valid)
         assertEquals("expected y to be equal to x", result.lazyMessage())
     }
 
     @Test fun `test sameInstanceAs valid`() {
-        val result = precondition.sameInstanceAs("x").test("x")
+        val result = matcher.sameInstanceAs("x").test("x")
 
         assertTrue(result.valid)
     }
 
     @Test fun `test sameInstanceAs invalid`() {
-        val result = precondition.sameInstanceAs("y").test("x")
+        val result = matcher.sameInstanceAs("y").test("x")
 
         assertFalse(result.valid)
         assertEquals("expected x to have the same reference as y", result.lazyMessage())

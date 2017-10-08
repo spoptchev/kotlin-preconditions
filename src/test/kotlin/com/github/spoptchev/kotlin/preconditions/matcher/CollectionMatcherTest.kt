@@ -1,4 +1,4 @@
-package com.github.spoptchev.kotlin.preconditions.conditions
+package com.github.spoptchev.kotlin.preconditions.matcher
 
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -6,12 +6,12 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class CollectionPreconditionsTest {
+class CollectionMatcherTest {
 
-    private val precondition = object : CollectionPreconditions {}
+    private val matcher = object : CollectionMatcher {}
 
     @Test fun `test have size valid`() {
-        val result = precondition
+        val result = matcher
                 .haveSize<String>(2)
                 .test(listOf("1", "2"))
 
@@ -20,7 +20,7 @@ class CollectionPreconditionsTest {
 
 
     @Test fun `test have size invalid`() {
-        val result = precondition
+        val result = matcher
                 .haveSize<String>(3)
                 .test(listOf("1", "2"))
 
@@ -29,7 +29,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test contain valid`() {
-        val result = precondition
+        val result = matcher
                 .contain("1")
                 .test(listOf("1", "2"))
 
@@ -37,7 +37,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test contain invalid`() {
-        val result = precondition
+        val result = matcher
                 .contain("3")
                 .test(listOf("1", "2"))
 
@@ -46,7 +46,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test empty valid`() {
-        val result = precondition
+        val result = matcher
                 .empty<String>()
                 .test(emptyList())
 
@@ -54,7 +54,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test empty invalid`() {
-        val result = precondition
+        val result = matcher
                 .empty<String>()
                 .test(listOf("1", "2"))
 
@@ -63,7 +63,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test containAll valid`() {
-        val result = precondition
+        val result = matcher
                 .containAll("1", "2")
                 .test(listOf("2", "1"))
 
@@ -71,7 +71,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test containAll invalid`() {
-        val result = precondition
+        val result = matcher
                 .containAll("1", "2", "4")
                 .test(listOf("3", "2", "1"))
 
@@ -80,7 +80,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test sorted valid`() {
-        val result = precondition
+        val result = matcher
                 .sorted<Int>()
                 .test(listOf(1, 2, 3))
 
@@ -88,7 +88,7 @@ class CollectionPreconditionsTest {
     }
 
     @Test fun `test sorted invalid`() {
-        val result = precondition
+        val result = matcher
                 .sorted<Int>()
                 .test(listOf(1, 3, 2))
 
