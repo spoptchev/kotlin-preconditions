@@ -32,6 +32,12 @@ class PreconditionDSLTest {
         }
     }
 
+    @Test fun `labeled valid evaluation`() {
+        check {
+            withLabel("ShouldNot") { "y" should equal("y") }
+        }
+    }
+
     @Test fun `test shouldNotBe`() {
         try {
             require { 1 shouldNotBe gt(0) }

@@ -26,7 +26,7 @@ data class PreconditionContext(
     infix fun <T> T.should(precondition: Precondition<T>): T = shouldBe(precondition)
 
     infix fun <T> T.shouldBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
-            .let { if (label == null) it else it.label(label) }
+            .let { it.label(label) }
             .let { evaluate(it.valid, it.lazyMessage) }
             .let { this }
 
