@@ -7,38 +7,13 @@ annotation class PreconditionDSLMarker
 
 typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 
-@PreconditionDSLMarker
-data class PreconditionContext(
-        private val evaluate: EvaluationMethod,
-        private val label: String? = null
-) :
-        CollectionMatcher,
-        ComparableMatcher,
-        MapMatcher,
-        StringMatcher,
-        ObjectMatcher
-{
 
-    inline fun <reified T> Precondition<T>.and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
-    inline fun <reified T> Precondition<T>.or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
-    inline fun <reified T> not(precondition: Precondition<T>) = NotPrecondition(precondition)
+data class Assertion<out T>(val value: T, val label: String?) {
 
-    infix fun <T> T.should(precondition: Precondition<T>): T = shouldBe(precondition)
-
-    infix fun <T> T.shouldBe(precondition: Precondition<T>): T = evalPrecondition(precondition)
-            .let { it.label(label) }
-            .let { evaluate(it.valid, it.lazyMessage) }
-            .let { this }
-
-    inline infix fun <reified T> T.shouldNot(precondition: Precondition<T>): T = shouldNotBe(precondition)
-    inline infix fun <reified T> T.shouldNotBe(precondition: Precondition<T>): T = shouldBe(not(precondition))
-
-    fun <T> withLabel(label: String, context: PreconditionContext.() -> T): T = context(copy(evaluate = evaluate, label = label))
-
-    private fun <T> T.evalPrecondition(precondition: Precondition<T>): Result = when(precondition) {
+    fun evalPrecondition(precondition: Precondition<T>): Result = when(precondition) {
 
         is Matcher<T> ->
-            precondition.test(this)
+            precondition.test(value)
 
         is AndPrecondition<T> -> {
             val left = evalPrecondition(precondition.left)
@@ -57,12 +32,34 @@ data class PreconditionContext(
 
 }
 
-fun require(preconditionContext: PreconditionContext.() -> Unit) {
-    preconditionContext(PreconditionContext(evaluate = ::require))
+@PreconditionDSLMarker
+class PreconditionContext<T> : CollectionMatcher, ComparableMatcher, MapMatcher, StringMatcher, ObjectMatcher {
+
+    infix fun Precondition<T>.and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
+    infix fun Precondition<T>.or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
+    infix fun not(precondition: Precondition<T>) = NotPrecondition(precondition)
+
+    fun to(precondition: Precondition<T>): Precondition<T> = toBe(precondition)
+    fun toBe(precondition: Precondition<T>): Precondition<T> = precondition
+    fun notTo(precondition: Precondition<T>): Precondition<T> = notToBe(precondition)
+    fun notToBe(precondition: Precondition<T>): Precondition<T> = not(precondition)
+
 }
 
-fun check(preconditionContext: PreconditionContext.() -> Unit) {
-    preconditionContext(PreconditionContext(evaluate = ::check))
+fun <T> require(value: T, label: String? = null, preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
+        assert(value, label, ::require, preconditionContext)
+
+fun <T> check(value: T, label: String? = null, preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
+        assert(value, label, ::check, preconditionContext)
+
+private fun <T> assert(value: T, label: String? = null, evaluate: EvaluationMethod, preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T {
+    val assertion = Assertion(value, label)
+    val precondition = preconditionContext(PreconditionContext())
+    val result = assertion.evalPrecondition(precondition)
+
+    return result.let { it.label(assertion.label) }
+            .let { evaluate(it.valid, it.lazyMessage) }
+            .let { assertion.value }
 }
 
 
