@@ -5,7 +5,7 @@ data class Result(val valid: Boolean, val lazyMessage: () -> String) {
     fun negate() = copy(valid = !valid, lazyMessage = negatedLazyMessage(lazyMessage()))
 
     fun label(label: String?) = if (valid || label == null) this else
-        copy(valid = !valid, lazyMessage = labelLazyMessage(label, lazyMessage()))
+        copy(lazyMessage = labelLazyMessage(label, lazyMessage()))
 
     private fun labelLazyMessage(label: String, message: String) = {
         message.replace(LABEL_REGEX, "$1 $label with value(s)$2")
