@@ -1,38 +1,39 @@
 package com.github.spoptchev.kotlin.preconditions.matcher
 
+import com.github.spoptchev.kotlin.preconditions.Condition
 import com.github.spoptchev.kotlin.preconditions.Matcher
 
 
 interface CollectionMatcher {
 
     fun <T> haveSize(size: Int) = object : Matcher<Collection<T>>() {
-        override fun test(value: Collection<T>) = verify(value.size == size) {
-            "expected $value to have size $size but has size ${value.size}"
+        override fun test(condition: Condition<Collection<T>>) = condition.test {
+            withResult(value.size == size) { "$expectedTo have size $size but has size ${value.size}"}
         }
     }
 
     fun <T> contain(element: T) = object : Matcher<Collection<T>>() {
-        override fun test(value: Collection<T>) = verify(value.contains(element)) {
-            "expected $value to contain element $element"
+        override fun test(condition: Condition<Collection<T>>) = condition.test {
+            withResult(value.contains(element)) { "$expectedTo contain element $element" }
         }
     }
 
     fun <T> empty() = object : Matcher<Collection<T>>() {
-        override fun test(value: Collection<T>) = verify(value.isEmpty()) {
-            "expected $value to be empty"
+        override fun test(condition: Condition<Collection<T>>) = condition.test {
+            withResult(value.isEmpty()) { "$expectedTo be empty" }
         }
     }
 
     fun <T> containAll(vararg values: T) = containAll(values.asList())
-    fun <T> containAll(values: List<T>) = object : Matcher<Collection<T>>() {
-        override fun test(value: Collection<T>) = verify(values.all(value::contains)) {
-            "expected $value to contain all values of $values"
+    fun <T> containAll(values: Collection<T>) = object : Matcher<Collection<T>>() {
+        override fun test(condition: Condition<Collection<T>>) = condition.test {
+            withResult(values.all(value::contains)) { "$expectedTo contain all values of $values" }
         }
     }
 
-    fun <T : Comparable<T>> sorted() = object : Matcher<List<T>>() {
-        override fun test(value: List<T>) = verify(value.sorted() == value) {
-            "expected $value to be sorted"
+    fun <T : Comparable<T>> sorted() = object : Matcher<Collection<T>>() {
+        override fun test(condition: Condition<Collection<T>>) = condition.test {
+            withResult(value.sorted() == value) { "$expectedTo be sorted" }
         }
     }
 

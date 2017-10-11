@@ -1,23 +1,54 @@
 package com.github.spoptchev.kotlin.preconditions
 
-data class Result(val valid: Boolean, val lazyMessage: () -> String) {
+data class Result(val valid: Boolean, val lazyMessage: () -> String)
 
-    fun negate() = copy(valid = !valid, lazyMessage = negatedLazyMessage(lazyMessage()))
+data class Condition<out T>(
+        val value: T,
+        private val label: String,
+        private val negated: Boolean = false
+) {
 
-    fun label(label: String?) = if (valid || label == null) this else
-        copy(lazyMessage = labelLazyMessage(label, lazyMessage()))
-
-    private fun labelLazyMessage(label: String, message: String) = {
-        message.replace(LABEL_REGEX, "$1 $label with value(s)$2")
+    val expectedTo: String by lazy {
+        when (negated) {
+            true -> "expected $label $value not to"
+            else -> "expected $label $value to"
+        }
     }
 
-    private fun negatedLazyMessage(message: String) = {
-        message.replace(NEGATION_REGEX, "$1not $2")
-    }
+    fun test(run: Condition<T>.() -> Result): Result = run(this)
 
-    companion object {
-        @JvmField val NEGATION_REGEX = Regex("(^.*?)(to.*$)")
-        @JvmField val LABEL_REGEX = Regex("(^expected)(.*$)")
+    fun withResult(valid: Boolean, lazyMessage: () -> String) = Result(valid == !negated, lazyMessage)
+
+}
+
+data class Assertion<out T>(
+        private val value: T,
+        private val label: String,
+        private val evaluate: EvaluationMethod
+) {
+
+    fun run(precondition: Precondition<T>): T = evalPrecondition(precondition)
+            .let { evaluate(it.valid, it.lazyMessage) }
+            .let { value }
+
+    private fun evalPrecondition(precondition: Precondition<T>, negated: Boolean = false): Result = when(precondition) {
+
+        is Matcher<T> ->
+            precondition.test(Condition(value, label, negated))
+
+        is AndPrecondition<T> -> {
+            val left = evalPrecondition(precondition.left)
+            if (left.valid) evalPrecondition(precondition.right) else left
+        }
+
+        is OrPrecondition<T> -> {
+            val left = evalPrecondition(precondition.left)
+            if (left.valid) left else evalPrecondition(precondition.right)
+        }
+
+        is NotPrecondition<T> ->
+            evalPrecondition(precondition.precondition, true)
+
     }
 
 }
@@ -26,9 +57,7 @@ sealed class Precondition<in T>
 
 abstract class Matcher<in T> : Precondition<T>() {
 
-    abstract fun test(value: T): Result
-
-    protected fun verify(valid: Boolean, lazyMessage: () -> String) = Result(valid, lazyMessage)
+    abstract fun test(condition: Condition<T>): Result
 
 }
 
