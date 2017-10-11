@@ -7,39 +7,6 @@ annotation class PreconditionDSLMarker
 
 typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 
-
-data class Assertion<out T>(
-        private val value: T,
-        private val label: String,
-        private val evaluate: EvaluationMethod
-) {
-
-    fun run(precondition: Precondition<T>): T = evalPrecondition(precondition)
-            .let { evaluate(it.valid, it.lazyMessage) }
-            .let { value }
-
-    private fun evalPrecondition(precondition: Precondition<T>, negated: Boolean = false): Result = when(precondition) {
-
-        is Matcher<T> ->
-            precondition.test(Condition(value, label, negated))
-
-        is AndPrecondition<T> -> {
-            val left = evalPrecondition(precondition.left)
-            if (left.valid) evalPrecondition(precondition.right) else left
-        }
-
-        is OrPrecondition<T> -> {
-            val left = evalPrecondition(precondition.left)
-            if (left.valid) left else evalPrecondition(precondition.right)
-        }
-
-        is NotPrecondition<T> ->
-            evalPrecondition(precondition.precondition, true)
-
-    }
-
-}
-
 @PreconditionDSLMarker
 class PreconditionContext<T> : CollectionMatcher, ComparableMatcher, MapMatcher, StringMatcher, ObjectMatcher {
 
