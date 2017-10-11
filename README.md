@@ -8,26 +8,24 @@ before an operation is executed.
 kotlin-preconditions provides a powerful DSL for defining preconditions:
 
 ```kotlin
-check {
-    1 shouldBe lt(0)
-}
+check(1) { lt(2) }
+check(listOf(1, 2)) { to(contain(1)) }
 
-require {
-    "hello" should match("not")
-}
+require(1) { lt(2) }
+require(listOf(1, 2)) { to(contain(1)) }
 ```
 
 If any of the preconditions are not met then `check` will throw an
 `IllegalStateException` and `require` will throw an `IllegalArgumentException`.
+The exception message will be generated lazily, so your application does
+not waste resources on evaluating objects that may not trigger an exception.
 
 Compose your preconditions the way you like it:
 
 ```kotlin
 val list = listOf(1, 2)
 
-require {
-    list should contain(3).or(contain(1)).and(not(haveSize(3)))
-}
+require(list) { contain(3) or contain(1) and not(haveSize(3)) }
 ```
 
 ### API Overview
@@ -35,13 +33,13 @@ require {
 #### String preconditions
 
 ```kotlin
-require {
-    "hello" should startWith("he")
-    "hello" should include("ll")
-    "hello" should match("hello")
-    "hello" should endWith("lo")
-    "hello" should haveLength(5)
-}
+val value = "hello"
+
+require(value) { startWith("he") and haveLength(5) and not(include("io")) }
+require(value) { include("ll") }
+require(value) { match("hello") }
+require(value) { endWith("lo") }
+require(value) { haveLength(5) }
 ```
 
 #### Collection preconditions
@@ -49,25 +47,21 @@ require {
 ```kotlin
 val list = listOf(1, 2)
 
-require {
-    list should haveSize(2)
-    list should contain(2)
-    list shouldNotBe empty()
-    list should containAll(1, 2)
-    list shouldBe sorted()
-}
+require(list) { haveSize(2) }
+require(list) { contain(1) or contain(3) and not(haveSize(3)) }
+require(list) { containAll(1, 2) }
+require(list) { containAll(list) }
+require(list) { sorted() }
 ```
 
 #### Comparable preconditions
 
 ```kotlin
-require {
-    1 shouldBe lt(2)
-    1 shouldBe lte(1)
-    1 shouldBe gt(0)
-    1 shouldBe gte(1)
-    1 shouldBe between(0..2)
-}
+require(1) { lt(2) }
+require(1) { lte(1) }
+require(1) { gt(0) }
+require(1) { gte(1) }
+require(1) { between(0..2) }
 ```
 
 #### Map preconditions
@@ -75,11 +69,9 @@ require {
 ```kotlin
 val map = mapOf(1 to "1")
 
-require {
-    map should haveKey(1)
-    map should haveValue("1")
-    map should contain(1, "1")
-}
+require(map) { to(haveKey(1)) }
+require(map) { haveValue("1") }
+require(map) { contain(1, "1") }
 ```
 
 #### Object preconditions
@@ -87,21 +79,17 @@ require {
 ```kotlin
 val value = "hello"
 
-require {
-    value shouldNot beNull()
-    value should equal("hello")
-    value shouldBe sameInstanceAs("hello")
-}
+require(value) { not(beNull()) }
+require(value) { equal("hello") }
+require(value) { sameInstanceAs("hello") }
 ```
 
 #### Composed preconditions
 
 ```kotlin
-val list = listOf(1, 2)
+val value = "hello"
 
-require {
-    list should contain(3).or(contain(1)).and(not(haveSize(3)))
-}
+require(value) { startWith("he") and haveLength(5) and not(include("io")) }
 ```
 
 #### Labels
@@ -109,9 +97,7 @@ require {
 ```kotlin
 val numbers = listOf(1, 2)
 
-require {
-    withLabel("Numbers") { numbers should contain(3).or(contain(1)).and(not(haveSize(3))) }
-}
+require(numbers, "Numbers") { contain(3) or contain(1) and not(haveSize(3)) }
 ```
 
 ### Installation
@@ -122,13 +108,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>3.0.1</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:3.0.1'
+compile 'com.github.spoptchev:kotlin-preconditions:4.0.0'
 ```
 

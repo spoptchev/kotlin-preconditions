@@ -9,7 +9,7 @@ class PreconditionDSLTest {
 
     @Test(expected = IllegalStateException::class)
     fun `test invalid check`() {
-        check("hallo") { match("ollex") }
+        check("hello") { match("olleh") }
         fail("should not be executed")
     }
 
@@ -82,7 +82,7 @@ class PreconditionDSLTest {
         require(value) { haveLength(5) }
     }
 
-    @Test fun `test integration of all type preconditions`() {
+    @Test fun `test integration of all object preconditions`() {
         val value = "hello"
 
         require(value) { not(beNull()) }
