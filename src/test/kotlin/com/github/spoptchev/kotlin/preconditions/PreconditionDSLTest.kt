@@ -10,6 +10,7 @@ class PreconditionDSLTest {
     @Test(expected = IllegalStateException::class)
     fun `test invalid check`() {
         check("hallo") { match("ollex") }
+        fail("should not be executed")
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -20,10 +21,10 @@ class PreconditionDSLTest {
 
     @Test fun `test check invalid with label`() {
         try {
-            check("x", "ShouldNot") { notToBe(equal("x")) }
+            check("x", "ID") { notToBe(equal("x")) }
             fail("should not be executed")
         } catch (e: IllegalStateException) {
-            assertEquals("expected ShouldNot with value(s) x not to be equal to x", e.message)
+            assertEquals("expected ID x not to be equal to x", e.message)
         }
     }
 
