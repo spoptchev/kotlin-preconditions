@@ -19,7 +19,7 @@ interface ObjectMatcher {
     }
 
     fun <T> sameInstanceAs(reference: T) = object : Matcher<T>() {
-        override fun test(condition: Condition<T>) = condition.test() {
+        override fun test(condition: Condition<T>) = condition.test {
             withResult(value === reference) { "$expectedTo have the same reference as $reference" }
         }
     }
