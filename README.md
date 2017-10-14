@@ -8,15 +8,15 @@ before an operation is executed.
 kotlin-preconditions provides a powerful DSL for defining preconditions:
 
 ```kotlin
-check(1) { lt(2) }
-check(listOf(1, 2)) { to(contain(1)) }
+checkThat(1) { isLt(2) }
+checkThat(listOf(1, 2)) { contains(1) }
 
-require(1) { lt(2) }
-require(listOf(1, 2)) { to(contain(1)) }
+requireThat(1) { isLt(2) }
+requireThat(listOf(1, 2)) { contains(1) }
 ```
 
-If any of the preconditions are not met then `check` will throw an
-`IllegalStateException` and `require` will throw an `IllegalArgumentException`.
+If any of the preconditions are not met then `checkThat` will throw an
+`IllegalStateException` and `requireThat` will throw an `IllegalArgumentException`.
 The exception message will be generated lazily, so your application does
 not waste resources on evaluating objects that may not trigger an exception.
 
@@ -25,7 +25,7 @@ Compose your preconditions the way you like it:
 ```kotlin
 val list = listOf(1, 2)
 
-require(list) { contain(3) or contain(1) and not(haveSize(3)) }
+requireThat(list) { contains(3) or contains(1) and not(hasSize(3)) }
 ```
 
 ### API Overview
@@ -35,11 +35,13 @@ require(list) { contain(3) or contain(1) and not(haveSize(3)) }
 ```kotlin
 val value = "hello"
 
-require(value) { startWith("he") and haveLength(5) and not(include("io")) }
-require(value) { include("ll") }
-require(value) { match("hello") }
-require(value) { endWith("lo") }
-require(value) { haveLength(5) }
+requireThat(value) { startsWith("he") and hasLength(5) and not(includes("io")) }
+requireThat(value) { includes("ll") }
+requireThat(value) { matches("hello") }
+requireThat(value) { endsWith("lo") }
+requireThat(value) { hasLength(5) }
+requireThat(value) { not(isBlank()) }
+requireThat(value) { not(isEmptyString()) }
 ```
 
 #### Collection preconditions
@@ -47,21 +49,21 @@ require(value) { haveLength(5) }
 ```kotlin
 val list = listOf(1, 2)
 
-require(list) { haveSize(2) }
-require(list) { contain(1) or contain(3) and not(haveSize(3)) }
-require(list) { containAll(1, 2) }
-require(list) { containAll(list) }
-require(list) { sorted() }
+requireThat(list) { hasSize(2) }
+requireThat(list) { contains(1) or contains(3) and not(hasSize(3)) }
+requireThat(list) { containsAll(1, 2) }
+requireThat(list) { containsAll(list) }
+requireThat(list) { isSorted() }
 ```
 
 #### Comparable preconditions
 
 ```kotlin
-require(1) { lt(2) }
-require(1) { lte(1) }
-require(1) { gt(0) }
-require(1) { gte(1) }
-require(1) { between(0..2) }
+requireThat(1) { isLt(2) }
+requireThat(1) { isLte(1) }
+requireThat(1) { isGt(0) }
+requireThat(1) { isGte(1) }
+requireThat(1) { isBetween(0..2) }
 ```
 
 #### Map preconditions
@@ -69,19 +71,19 @@ require(1) { between(0..2) }
 ```kotlin
 val map = mapOf(1 to "1")
 
-require(map) { to(haveKey(1)) }
-require(map) { haveValue("1") }
-require(map) { contain(1, "1") }
+requireThat(map) { hasKey(1) }
+requireThat(map) { hasValue("1") }
+requireThat(map) { contains(1, "1") }
 ```
 
 #### Object preconditions
 
 ```kotlin
-val value = "hello"
+val result = Result(true)
 
-require(value) { not(beNull()) }
-require(value) { equal("hello") }
-require(value) { sameInstanceAs("hello") }
+requireThat(result) { not(isNull()) }
+requireThat(result) { isEqualTo(result) }
+requireThat(result) { isSameInstanceAs(result) }
 ```
 
 #### Composed preconditions
@@ -89,7 +91,7 @@ require(value) { sameInstanceAs("hello") }
 ```kotlin
 val value = "hello"
 
-require(value) { startWith("he") and haveLength(5) and not(include("io")) }
+requireThat(value) { startsWith("he") and hasLength(5) and not(includes("io")) }
 ```
 
 #### Labels
@@ -97,7 +99,7 @@ require(value) { startWith("he") and haveLength(5) and not(include("io")) }
 ```kotlin
 val numbers = listOf(1, 2)
 
-require(numbers, "Numbers") { contain(3) or contain(1) and not(haveSize(3)) }
+requireThat(numbers, "Numbers") { contains(3) or contains(1) and not(hasSize(3)) }
 ```
 
 ### Installation
@@ -108,13 +110,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>4.0.0</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:4.0.0'
+compile 'com.github.spoptchev:kotlin-preconditions:5.0.0'
 ```
 

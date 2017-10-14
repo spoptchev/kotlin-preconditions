@@ -11,40 +11,40 @@ class ObjectMatcherTest {
 
     private val matcher = object : ObjectMatcher {}
 
-    @Test fun `test beNull valid`() {
-        val result = matcher.beNull<String?>().test(condition(null))
+    @Test fun `test isNull valid`() {
+        val result = matcher.isNull<String?>().test(condition(null))
 
         assertTrue(result.valid)
     }
 
-    @Test fun `test beNull invalid`() {
-        val result = matcher.beNull<String?>().test(condition("test"))
+    @Test fun `test isNull invalid`() {
+        val result = matcher.isNull<String?>().test(condition("test"))
 
         assertFalse(result.valid)
         assertEquals("expected value test to be null", result.lazyMessage())
     }
 
-    @Test fun `test equal valid`() {
-        val result = matcher.equal("x").test(condition("x"))
+    @Test fun `test isEqualTo valid`() {
+        val result = matcher.isEqualTo("x").test(condition("x"))
 
         assertTrue(result.valid)
     }
 
-    @Test fun `test equal invalid`() {
-        val result = matcher.equal("x").test(condition("y"))
+    @Test fun `test isEqualTo invalid`() {
+        val result = matcher.isEqualTo("x").test(condition("y"))
 
         assertFalse(result.valid)
         assertEquals("expected value y to be equal to x", result.lazyMessage())
     }
 
-    @Test fun `test sameInstanceAs valid`() {
-        val result = matcher.sameInstanceAs("x").test(condition("x"))
+    @Test fun `test isSameInstanceAs valid`() {
+        val result = matcher.isSameInstanceAs("x").test(condition("x"))
 
         assertTrue(result.valid)
     }
 
-    @Test fun `test sameInstanceAs invalid`() {
-        val result = matcher.sameInstanceAs("y").test(condition("x"))
+    @Test fun `test isSameInstanceAs invalid`() {
+        val result = matcher.isSameInstanceAs("y").test(condition("x"))
 
         assertFalse(result.valid)
         assertEquals("expected value x to have the same reference as y", result.lazyMessage())
