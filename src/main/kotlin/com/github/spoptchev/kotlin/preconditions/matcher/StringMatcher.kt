@@ -6,33 +6,56 @@ import com.github.spoptchev.kotlin.preconditions.Matcher
 
 interface StringMatcher {
 
-    fun startWith(prefix: String) = object : Matcher<String>() {
+    fun startsWithIgnoreCase(prefix: String) = startsWith(prefix, true)
+    fun startsWith(prefix: String, ignoreCase: Boolean = false) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
-            withResult(value.startsWith(prefix)) { "$expectedTo start with '$prefix'" }
+            withResult(value.startsWith(prefix, ignoreCase)) { "$expectedTo start with '$prefix'" }
         }
     }
 
-    fun include(substring: String) = object : Matcher<String>() {
+    fun includesIgnoreCase(substring: String) = includes(substring, true)
+    fun includes(substring: String, ignoreCase: Boolean = false) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
-            withResult(value.contains(substring)) { "$expectedTo include '$substring'" }
+            withResult(value.contains(substring, ignoreCase)) { "$expectedTo include '$substring'" }
         }
     }
 
-    fun match(regex: String) = object : Matcher<String>() {
+    fun matches(regex: String) = matches(Regex(regex))
+    fun matches(regex: Regex) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
-            withResult(value.matches(Regex(regex))) { "$expectedTo match '$regex'" }
+            withResult(value.matches(regex)) { "$expectedTo match '$regex'" }
         }
     }
 
-    fun endWith(suffix: String) = object : Matcher<String>() {
+    fun endsWithIgnoreCase(suffix: String) = endsWith(suffix, true)
+    fun endsWith(suffix: String, ignoreCase: Boolean = false) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
-            withResult(value.endsWith(suffix)) { "$expectedTo end with '$suffix'" }
+            withResult(value.endsWith(suffix, ignoreCase)) { "$expectedTo end with '$suffix'" }
         }
     }
 
-    fun haveLength(length: Int) = object : Matcher<String>() {
+    fun hasLength(length: Int) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
             withResult(value.length == length) { "$expectedTo have length $length" }
+        }
+    }
+
+    fun isEqualToIgnoreCase(other: String) = isEqualTo(other, true)
+    fun isEqualTo(other: String, ignoreCase: Boolean = false) = object : Matcher<String>() {
+        override fun test(condition: Condition<String>) = condition.test {
+            withResult(value.equals(other, ignoreCase)) { "$expectedTo be equal to '$other'" }
+        }
+    }
+
+    fun isBlank() = object : Matcher<String?>() {
+        override fun test(condition: Condition<String?>) = condition.test {
+            withResult(value?.isBlank() ?: true) { "$expectedTo be blank" }
+        }
+    }
+
+    fun isEmptyString() = object : Matcher<String>() {
+        override fun test(condition: Condition<String>) = condition.test {
+            withResult(value.isEmpty()) { "$expectedTo be empty" }
         }
     }
 
