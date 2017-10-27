@@ -17,9 +17,13 @@ class PreconditionContext<T> : CollectionMatcher, ComparableMatcher, MapMatcher,
 }
 
 fun <T> requireThat(value: T, label: String = "value", preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
+        require(value, label, preconditionContext)
+fun <T> require(value: T, label: String = "value", preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
         assertThat(value, label, ::require, preconditionContext)
 
 fun <T> checkThat(value: T, label: String = "value", preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
+        check(value, label, preconditionContext)
+fun <T> check(value: T, label: String = "value", preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
         assertThat(value, label, ::check, preconditionContext)
 
 private fun <T> assertThat(value: T, label: String, evaluate: EvaluationMethod, preconditionContext: PreconditionContext<T>.() -> Precondition<T>): T =
