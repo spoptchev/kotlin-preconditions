@@ -30,6 +30,17 @@ requireThat(list) { contains(3) or contains(1) and not(hasSize(3)) }
 
 ### API Overview
 
+#### Aliases
+
+Instead of `checkThat` and `requireThat` you can also use `check` and `require`.
+
+```kotlin
+val value = "hello"
+
+check(value) { startsWith("he") and hasLength(5) and not(includes("io")) }
+require(value) { startsWith("he") and hasLength(5) and not(includes("io")) }
+```
+
 #### String preconditions
 
 ```kotlin
@@ -110,13 +121,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>5.0.0</version>
+  <version>5.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:5.0.0'
+compile 'com.github.spoptchev:kotlin-preconditions:5.1.0'
 ```
 
