@@ -10,43 +10,15 @@ buildscript {
 }
 
 plugins {
-    id 'net.researchgate.release' version '2.6.0'
-}
-
-release {
-    failOnUpdateNeeded = false
+    id 'net.researchgate.release' version '2.6.0' apply false
 }
 
 group 'com.github.spoptchev'
 
 apply plugin: 'kotlin'
-apply plugin: 'maven'
-apply plugin: 'signing'
 
 repositories {
     mavenCentral()
-}
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
-
-build {
-    afterReleaseBuild.dependsOn uploadArchives
 }
 
 dependencies {
@@ -56,44 +28,75 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 }
 
+if (project.hasProperty("release")) {
+    apply plugin: 'net.researchgate.release'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    release {
+        failOnUpdateNeeded = false
+    }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: System.getenv('OSSRH_USERNAME'), password: System.getenv('OSSRH_PASSWORD'))
-            }
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: System.getenv('OSSRH_USERNAME'), password: System.getenv('OSSRH_PASSWORD'))
-            }
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
-            pom.project {
-                name 'Kotlin Preconditions'
-                packaging 'jar'
-                description 'Kotlin Preconditions'
-                url 'http://www.github.com/spoptchev/kotlin-preconditions'
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
 
-                scm {
-                    connection 'scm:git:http://www.github.com/spoptchev/kotlin-preconditions'
-                    developerConnection 'scm:git:http://github.com/spoptchev'
+    signing {
+        sign configurations.archives
+    }
+
+    build {
+        afterReleaseBuild.dependsOn uploadArchives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: System.getenv('OSSRH_USERNAME'), password: System.getenv('OSSRH_PASSWORD'))
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: System.getenv('OSSRH_USERNAME'), password: System.getenv('OSSRH_PASSWORD'))
+                }
+
+                pom.project {
+                    name 'Kotlin Preconditions'
+                    packaging 'jar'
+                    description 'Kotlin Preconditions'
                     url 'http://www.github.com/spoptchev/kotlin-preconditions'
-                }
 
-                licenses {
-                    license {
-                        name 'The MIT License'
-                        url 'https://opensource.org/licenses/MIT'
+                    scm {
+                        connection 'scm:git:http://www.github.com/spoptchev/kotlin-preconditions'
+                        developerConnection 'scm:git:http://github.com/spoptchev'
+                        url 'http://www.github.com/spoptchev/kotlin-preconditions'
                     }
-                }
 
-                developers {
-                    developer {
-                        id 'spoptchev'
-                        name 'Spas Poptchev'
-                        email 'spas.poptchev@gmail.com'
+                    licenses {
+                        license {
+                            name 'The MIT License'
+                            url 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'spoptchev'
+                            name 'Spas Poptchev'
+                            email 'spas.poptchev@gmail.com'
+                        }
                     }
                 }
             }
