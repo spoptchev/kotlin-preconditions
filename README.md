@@ -53,6 +53,7 @@ requireThat(value) { endsWith("lo") }
 requireThat(value) { hasLength(5) }
 requireThat(value) { not(isBlank()) }
 requireThat(value) { not(isEmptyString()) }
+requireThat(value) { hasLengthBetween(1, 5) }
 ```
 
 #### Collection preconditions
@@ -121,13 +122,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>5.1.0</version>
+  <version>5.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:5.1.0'
+compile 'com.github.spoptchev:kotlin-preconditions:5.2.0'
 ```
 

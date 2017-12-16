@@ -82,6 +82,7 @@ class PreconditionDSLTest {
         requireThat(value) { hasLength(5) }
         requireThat(value) { not(isBlank()) }
         requireThat(value) { not(isEmptyString()) }
+        requireThat(value) { hasLengthBetween(1, 5) }
     }
 
     @Test fun `test integration of all object preconditions`() {

@@ -137,7 +137,34 @@ class StringMatcherTest {
     @Test fun `test hasLength invalid`() {
         val result = matcher.hasLength(2).test(condition("hello"))
 
+        assertFalse(result.valid)
         assertEquals("expected value hello to have length 2", result.lazyMessage())
+    }
+
+    @Test fun `test hasLengthBetween within max range`() {
+        val result = matcher.hasLengthBetween(4, 5).test(condition("hello"))
+
+        assertTrue(result.valid)
+    }
+
+    @Test fun `test hasLengthBetween within min range`() {
+        val result = matcher.hasLengthBetween(5, 6).test(condition("hello"))
+
+        assertTrue(result.valid)
+    }
+
+    @Test fun `test hasLengthBetween exceeding max`() {
+        val result = matcher.hasLengthBetween(1, 4).test(condition("hello"))
+
+        assertFalse(result.valid)
+        assertEquals("expected value hello to have length between 1 and 4", result.lazyMessage())
+    }
+
+    @Test fun `test hasLengthBetween exceeding min`() {
+        val result = matcher.hasLengthBetween(6, 10).test(condition("hello"))
+
+        assertFalse(result.valid)
+        assertEquals("expected value hello to have length between 6 and 10", result.lazyMessage())
     }
 
     @Test fun `test isBlank valid`() {
@@ -156,6 +183,7 @@ class StringMatcherTest {
     @Test fun `test isBlank invalid`() {
         val result = matcher.isBlank().test(condition("hello"))
 
+        assertFalse(result.valid)
         assertEquals("expected value hello to be blank", result.lazyMessage())
     }
 
@@ -168,6 +196,7 @@ class StringMatcherTest {
     @Test fun `test isEmptyString invalid`() {
         val result = matcher.isEmptyString().test(condition("hello"))
 
+        assertFalse(result.valid)
         assertEquals("expected value hello to be empty", result.lazyMessage())
     }
 

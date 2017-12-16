@@ -40,6 +40,12 @@ interface StringMatcher {
         }
     }
 
+    fun hasLengthBetween(min: Int, max: Int) = object : Matcher<String>() {
+        override fun test(condition: Condition<String>) = condition.test {
+            withResult(value.length in min..max) { "$expectedTo have length between $min and $max" }
+        }
+    }
+
     fun isEqualToIgnoreCase(other: String) = isEqualTo(other, true)
     fun isEqualTo(other: String, ignoreCase: Boolean = false) = object : Matcher<String>() {
         override fun test(condition: Condition<String>) = condition.test {
