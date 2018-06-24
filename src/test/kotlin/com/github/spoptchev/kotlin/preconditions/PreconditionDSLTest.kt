@@ -1,5 +1,6 @@
 package com.github.spoptchev.kotlin.preconditions
 
+import com.github.spoptchev.kotlin.preconditions.matcher.*
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -19,7 +20,8 @@ class PreconditionDSLTest {
         fail("should not be executed")
     }
 
-    @Test fun `test check invalid with label`() {
+    @Test
+    fun `test check invalid with label`() {
         try {
             checkThat("x", "ID") { not(isEqualTo("x")) }
             fail("should not be executed")
@@ -28,11 +30,13 @@ class PreconditionDSLTest {
         }
     }
 
-    @Test fun `test labeled valid evaluation`() {
+    @Test
+    fun `test labeled valid evaluation`() {
         checkThat("y", "Should") { isEqualTo("y") }
     }
 
-    @Test fun `test shouldNotBe`() {
+    @Test
+    fun `test shouldNotBe`() {
         try {
             requireThat(1) { isGt(0) }
         } catch (e: IllegalArgumentException) {
@@ -40,13 +44,15 @@ class PreconditionDSLTest {
         }
     }
 
-    @Test fun `test result value`() {
+    @Test
+    fun `test result value`() {
         val result: Int = requireThat(1) { isGt(0) }
 
         assertEquals(result, 1)
     }
 
-    @Test fun `test integration of all collection preconditions`() {
+    @Test
+    fun `test integration of all collection preconditions`() {
         val list = listOf(1, 2)
 
         requireThat(list) { hasSize(2) }
@@ -54,9 +60,11 @@ class PreconditionDSLTest {
         requireThat(list) { containsAll(1, 2) }
         requireThat(list) { containsAll(list) }
         requireThat(list) { isSorted() }
+        requireThat(list) { not(isEmpty()) }
     }
 
-    @Test fun `test integration of all comparable preconditions`() {
+    @Test
+    fun `test integration of all comparable preconditions`() {
         requireThat(1) { isLt(2) }
         requireThat(1) { isLte(1) }
         requireThat(1) { isGt(0) }
@@ -64,7 +72,8 @@ class PreconditionDSLTest {
         requireThat(1) { isBetween(0..2) }
     }
 
-    @Test fun `test integration of all map preconditions`() {
+    @Test
+    fun `test integration of all map preconditions`() {
         val map = mapOf(1 to "1")
 
         requireThat(map) { hasKey(1) }
@@ -72,7 +81,8 @@ class PreconditionDSLTest {
         requireThat(map) { contains(1, "1") }
     }
 
-    @Test fun `test integration of all string preconditions`() {
+    @Test
+    fun `test integration of all string preconditions`() {
         val value = "hello"
 
         requireThat(value) { startsWith("he") and hasLength(5) and not(includes("io")) }
@@ -81,7 +91,7 @@ class PreconditionDSLTest {
         requireThat(value) { endsWith("lo") }
         requireThat(value) { hasLength(5) }
         requireThat(value) { not(isBlank()) }
-        requireThat(value) { not(isEmptyString()) }
+        requireThat(value) { not(isEmpty()) }
         requireThat(value) { hasLengthBetween(1, 5) }
     }
 

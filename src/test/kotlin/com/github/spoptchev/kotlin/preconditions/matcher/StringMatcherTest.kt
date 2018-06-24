@@ -1,203 +1,213 @@
 package com.github.spoptchev.kotlin.preconditions.matcher
 
-import com.github.spoptchev.kotlin.preconditions.condition
+import com.github.spoptchev.kotlin.preconditions.requireThat
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.assertFails
 
 
 class StringMatcherTest {
 
-    private val matcher = object : StringMatcher {}
-
-    @Test fun `test matches valid`() {
-        val result = matcher.matches("hello").test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test matches valid`() {
+        requireThat("hello") { matches("hello") }
     }
 
-    @Test fun `test matches invalid`() {
-        val result = matcher.matches("invalid").test(condition("something"))
+    @Test
+    fun `test matches invalid`() {
+        val exception = assertFails {
+            requireThat("something") { matches("invalid") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value something to match 'invalid'", result.lazyMessage())
+        assertEquals("expected value something to match 'invalid'", exception.message)
     }
 
-    @Test fun `test startsWithIgnoreCase valid`() {
-        val result = matcher.startsWithIgnoreCase("He").test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test startsWithIgnoreCase valid`() {
+        requireThat("hello") { startsWithIgnoreCase("He") }
     }
 
-    @Test fun `test startsWithIgnoreCase invalid`() {
-        val result = matcher.startsWithIgnoreCase("Eh").test(condition("hello"))
+    @Test
+    fun `test startsWithIgnoreCase invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { startsWithIgnoreCase("Eh") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to start with 'Eh'", result.lazyMessage())
+        assertEquals("expected value hello to start with 'Eh'", exception.message)
     }
 
-    @Test fun `test startsWith valid`() {
-        val result = matcher.startsWith("HE").test(condition("HEllo"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test startsWith valid`() {
+        requireThat("HEllo") { startsWith("HE") }
     }
 
-    @Test fun `test startsWith invalid`() {
-        val result = matcher.startsWith("EH").test(condition("HEllo"))
+    @Test
+    fun `test startsWith invalid`() {
+        val exception = assertFails {
+            requireThat("HEllo") { startsWith("EH") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value HEllo to start with 'EH'", result.lazyMessage())
+        assertEquals("expected value HEllo to start with 'EH'", exception.message)
     }
 
-    @Test fun `test includesIgnoreCase valid`() {
-        val result = matcher.includesIgnoreCase("EL").test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test includesIgnoreCase valid`() {
+        requireThat("hello") { includesIgnoreCase("EL") }
     }
 
-    @Test fun `test includesIgnoreCase invalid`() {
-        val result = matcher.includesIgnoreCase("LE").test(condition("hello"))
+    @Test
+    fun `test includesIgnoreCase invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { includesIgnoreCase("LE") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to include 'LE'", result.lazyMessage())
+        assertEquals("expected value hello to include 'LE'", exception.message)
     }
 
-    @Test fun `test includes valid`() {
-        val result = matcher.includes("el").test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test includes valid`() {
+        requireThat("hello") { includes("el") }
     }
 
-    @Test fun `test includes invalid`() {
-        val result = matcher.includes("le").test(condition("hello"))
+    @Test
+    fun `test includes invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { includes("le") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to include 'le'", result.lazyMessage())
+        assertEquals("expected value hello to include 'le'", exception.message)
     }
 
-    @Test fun `test endsWithIgnoreCase valid`() {
-        val result = matcher.endsWithIgnoreCase("Lo").test(condition("helLO"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test endsWithIgnoreCase valid`() {
+        requireThat("helLo") { endsWithIgnoreCase("lo") }
     }
 
-    @Test fun `test endsWithIgnoreCase invalid`() {
-        val result = matcher.endsWithIgnoreCase("Ol").test(condition("helLO"))
+    @Test
+    fun `test endsWithIgnoreCase invalid`() {
+        val exception = assertFails {
+            requireThat("helLO") { endsWithIgnoreCase("Ol") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value helLO to end with 'Ol'", result.lazyMessage())
+        assertEquals("expected value helLO to end with 'Ol'", exception.message)
     }
 
-    @Test fun `test endsWith valid`() {
-        val result = matcher.endsWith("Lo").test(condition("helLo"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test endsWith valid`() {
+        requireThat("helLo") { endsWith("Lo") }
     }
 
-    @Test fun `test endsWith invalid`() {
-        val result = matcher.endsWith("Ol").test(condition("helLo"))
+    @Test
+    fun `test endsWith invalid`() {
+        val exception = assertFails {
+            requireThat("helLo") { endsWith("Ol") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value helLo to end with 'Ol'", result.lazyMessage())
+        assertEquals("expected value helLo to end with 'Ol'", exception.message)
     }
 
-    @Test fun `test isEqualToIgnoreCase valid`() {
-        val result = matcher.isEqualToIgnoreCase("HELLO").test(condition("helLO"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isEqualToIgnoreCase valid`() {
+        requireThat("helLo") { isEqualToIgnoreCase("HELLO") }
     }
 
-    @Test fun `test isEqualToIgnoreCase invalid`() {
-        val result = matcher.isEqualToIgnoreCase("EHLLO").test(condition("helLO"))
+    @Test
+    fun `test isEqualToIgnoreCase invalid`() {
+        val exception = assertFails {
+            requireThat("helLO") { isEqualToIgnoreCase("EHLLO") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value helLO to be equal to 'EHLLO'", result.lazyMessage())
+        assertEquals("expected value helLO to be equal to 'EHLLO'", exception.message)
     }
 
-    @Test fun `test isEqualTo valid`() {
-        val result = matcher.isEqualTo("helLo").test(condition("helLo"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isEqualTo valid`() {
+        requireThat("helLo") { isEqualTo("helLo") }
     }
 
-    @Test fun `test isEqualTo invalid`() {
-        val result = matcher.isEqualTo("hello").test(condition("helLo"))
+    @Test
+    fun `test isEqualTo invalid`() {
+        val exception = assertFails {
+            requireThat("helLo") { isEqualTo("hello") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value helLo to be equal to 'hello'", result.lazyMessage())
+        assertEquals("expected value helLo to be equal to 'hello'", exception.message)
     }
 
-    @Test fun `test hasLength valid`() {
-        val result = matcher.hasLength(5).test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test hasLength valid`() {
+        requireThat("hello") { hasLength(5) }
     }
 
-    @Test fun `test hasLength invalid`() {
-        val result = matcher.hasLength(2).test(condition("hello"))
+    @Test
+    fun `test hasLength invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { hasLength(2) }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to have length 2", result.lazyMessage())
+        assertEquals("expected value hello to have length 2", exception.message)
     }
 
-    @Test fun `test hasLengthBetween within max range`() {
-        val result = matcher.hasLengthBetween(4, 5).test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test hasLengthBetween within max range`() {
+        requireThat("hello") { hasLengthBetween(4, 5) }
     }
 
-    @Test fun `test hasLengthBetween within min range`() {
-        val result = matcher.hasLengthBetween(5, 6).test(condition("hello"))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test hasLengthBetween within min range`() {
+        requireThat("hello") { hasLengthBetween(5, 6) }
     }
 
-    @Test fun `test hasLengthBetween exceeding max`() {
-        val result = matcher.hasLengthBetween(1, 4).test(condition("hello"))
+    @Test
+    fun `test hasLengthBetween exceeding max`() {
+        val exception = assertFails {
+            requireThat("hello") { hasLengthBetween(1, 4) }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to have length between 1 and 4", result.lazyMessage())
+        assertEquals("expected value hello to have length between 1 and 4", exception.message)
     }
 
-    @Test fun `test hasLengthBetween exceeding min`() {
-        val result = matcher.hasLengthBetween(6, 10).test(condition("hello"))
+    @Test
+    fun `test hasLengthBetween exceeding min`() {
+        val exception = assertFails {
+            requireThat("hello") { hasLengthBetween(6, 10) }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to have length between 6 and 10", result.lazyMessage())
+        assertEquals("expected value hello to have length between 6 and 10", exception.message)
     }
 
-    @Test fun `test isBlank valid`() {
-        val result = matcher.isBlank().test(condition(""))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isBlank valid`() {
+        requireThat("") { isBlank() }
     }
 
-    @Test fun `test isBlank valid with null`() {
+    @Test
+    fun `test isBlank valid with null`() {
         val string: String? = null
-        val result = matcher.isBlank().test(condition(string))
-
-        assertTrue(result.valid)
+        requireThat(string) { isBlank() }
     }
 
-    @Test fun `test isBlank invalid`() {
-        val result = matcher.isBlank().test(condition("hello"))
+    @Test
+    fun `test isBlank invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { isBlank() }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to be blank", result.lazyMessage())
+        assertEquals("expected value hello to be blank", exception.message)
     }
 
-    @Test fun `test isEmptyString valid`() {
-        val result = matcher.isEmptyString().test(condition(""))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isEmpty valid`() {
+        requireThat("") { isEmpty() }
     }
 
-    @Test fun `test isEmptyString invalid`() {
-        val result = matcher.isEmptyString().test(condition("hello"))
+    @Test
+    fun `test isEmpty invalid`() {
+        val exception = assertFails {
+            requireThat("hello") { isEmpty() }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value hello to be empty", result.lazyMessage())
+        assertEquals("expected value hello to be empty", exception.message)
     }
 
 }

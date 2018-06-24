@@ -114,6 +114,22 @@ val numbers = listOf(1, 2)
 requireThat(numbers, "Numbers") { contains(3) or contains(1) and not(hasSize(3)) }
 ```
 
+#### Custom matchers
+
+Custom matchers can be added by using extension functions:
+
+```kotlin
+data class Car(val age: Int)
+
+fun PreconditionBlock<Car>.hasAge(expected: Int) = object : Matcher<Car>() {
+    override fun test(condition: Condition<Car>) = condition.test {
+        withResult(value.age == expected) { "expected car to be $expected years old, but was ${value.age}" }
+    }
+}
+
+requireThat(Car(22)) { hasAge(22) }
+```
+
 ### Installation
 
 Maven:
@@ -122,13 +138,13 @@ Maven:
 <dependency>
   <groupId>com.github.spoptchev</groupId>
   <artifactId>kotlin-preconditions</artifactId>
-  <version>5.2.1</version>
+  <version>6.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```
-compile 'com.github.spoptchev:kotlin-preconditions:5.2.1'
+compile 'com.github.spoptchev:kotlin-preconditions:6.0.0'
 ```
 

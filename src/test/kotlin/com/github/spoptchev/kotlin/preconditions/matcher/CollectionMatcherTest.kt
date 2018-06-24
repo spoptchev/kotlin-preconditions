@@ -1,100 +1,85 @@
 package com.github.spoptchev.kotlin.preconditions.matcher
 
-import com.github.spoptchev.kotlin.preconditions.condition
+import com.github.spoptchev.kotlin.preconditions.not
+import com.github.spoptchev.kotlin.preconditions.requireThat
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.assertFails
 
 
 class CollectionMatcherTest {
 
-    private val matcher = object : CollectionMatcher {}
+    private val list = listOf("1", "2")
 
-    @Test fun `test hasSize valid`() {
-        val result = matcher
-                .hasSize<String>(2)
-                .test(condition(listOf("1", "2")))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test hasSize valid`() {
+        requireThat(list) { hasSize(2) }
     }
 
 
-    @Test fun `test hasSize invalid`() {
-        val result = matcher
-                .hasSize<String>(3)
-                .test(condition(listOf("1", "2")))
+    @Test
+    fun `test hasSize invalid`() {
+        val exception = assertFails {
+            requireThat(list) { hasSize(3) }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value [1, 2] to have size 3 but has size 2", result.lazyMessage())
+        assertEquals("expected value [1, 2] to have size 3 but has size 2", exception.message)
     }
 
-    @Test fun `test contains valid`() {
-        val result = matcher
-                .contains("1")
-                .test(condition(listOf("1", "2")))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test contains valid`() {
+        requireThat(list) { contains("1") }
     }
 
-    @Test fun `test contains invalid`() {
-        val result = matcher
-                .contains("3")
-                .test(condition(listOf("1", "2")))
+    @Test
+    fun `test contains invalid`() {
+        val exception = assertFails {
+            requireThat(list) { contains("3") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value [1, 2] to contain element 3", result.lazyMessage())
+        assertEquals("expected value [1, 2] to contain element 3", exception.message)
     }
 
-    @Test fun `test isEmpty valid`() {
-        val result = matcher
-                .isEmpty<String>()
-                .test(condition(emptyList()))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isEmpty valid`() {
+        requireThat(list) { not(isEmpty()) }
     }
 
-    @Test fun `test isEmpty invalid`() {
-        val result = matcher
-                .isEmpty<String>()
-                .test(condition(listOf("1", "2")))
+    @Test
+    fun `test isEmpty invalid`() {
+        val exception = assertFails {
+            requireThat(list) { isEmpty() }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value [1, 2] to be empty", result.lazyMessage())
+        assertEquals("expected value [1, 2] to be empty", exception.message)
     }
 
-    @Test fun `test containsAll valid`() {
-        val result = matcher
-                .containsAll("1", "2")
-                .test(condition(listOf("2", "1")))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test containsAll valid`() {
+        requireThat(list) { containsAll("1", "2") }
     }
 
-    @Test fun `test containsAll invalid`() {
-        val result = matcher
-                .containsAll("1", "2", "4")
-                .test(condition(listOf("3", "2", "1")))
+    @Test
+    fun `test containsAll invalid`() {
+        val exception = assertFails {
+            requireThat(list) { containsAll("1", "2", "4") }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value [3, 2, 1] to contain all values of [1, 2, 4]", result.lazyMessage())
+        assertEquals("expected value [1, 2] to contain all values of [1, 2, 4]", exception.message)
     }
 
-    @Test fun `test isSorted valid`() {
-        val result = matcher
-                .isSorted<Int>()
-                .test(condition(listOf(1, 2, 3)))
-
-        assertTrue(result.valid)
+    @Test
+    fun `test isSorted valid`() {
+        requireThat(listOf(1, 2, 3)) { isSorted() }
     }
 
-    @Test fun `test isSorted invalid`() {
-        val result = matcher
-                .isSorted<Int>()
-                .test(condition(listOf(1, 3, 2)))
+    @Test
+    fun `test isSorted invalid`() {
+        val exception = assertFails {
+            requireThat(listOf(1, 3, 2)) { isSorted() }
+        }
 
-        assertFalse(result.valid)
-        assertEquals("expected value [1, 3, 2] to be sorted", result.lazyMessage())
+        assertEquals("expected value [1, 3, 2] to be sorted", exception.message)
     }
 
 }
