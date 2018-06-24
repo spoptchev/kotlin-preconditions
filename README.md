@@ -52,7 +52,7 @@ requireThat(value) { matches("hello") }
 requireThat(value) { endsWith("lo") }
 requireThat(value) { hasLength(5) }
 requireThat(value) { not(isBlank()) }
-requireThat(value) { not(isEmptyString()) }
+requireThat(value) { not(isEmpty()) }
 requireThat(value) { hasLengthBetween(1, 5) }
 ```
 
