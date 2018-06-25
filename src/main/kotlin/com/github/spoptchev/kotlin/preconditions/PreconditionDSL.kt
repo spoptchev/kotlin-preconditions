@@ -7,23 +7,39 @@ typealias EvaluationMethod = (value: Boolean, lazyMessage: () -> Any) -> Unit
 
 @PreconditionDSLMarker
 class PreconditionBlock<T>
+
 infix fun <T> Precondition<T>.and(precondition: Precondition<T>) = AndPrecondition(this, precondition)
+infix fun <T> Precondition<T>.and(preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>) = AndPrecondition(
+    left = this,
+    right = preconditionBlock(PreconditionBlock())
+)
+
 infix fun <T> Precondition<T>.or(precondition: Precondition<T>) = OrPrecondition(this, precondition)
+infix fun <T> Precondition<T>.or(preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>) = OrPrecondition(
+    left = this,
+    right = preconditionBlock(PreconditionBlock())
+)
+
 fun <T> PreconditionBlock<T>.not(precondition: Precondition<T>) = NotPrecondition(precondition)
 
-fun <T> requireThat(value: T, label: String = "value", preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>): T =
-        require(value, label, preconditionBlock)
+fun <T> requireThat(
+    value: T,
+    label: String = "value",
+    preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>
+): T = require(value, label, preconditionBlock)
+
 fun <T> require(value: T, label: String = "value", preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>): T =
-        assertThat(value, label, ::require, preconditionBlock)
+    assertThat(value, label, ::require, preconditionBlock)
 
 fun <T> checkThat(value: T, label: String = "value", preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>): T =
-        check(value, label, preconditionBlock)
+    check(value, label, preconditionBlock)
+
 fun <T> check(value: T, label: String = "value", preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>): T =
-        assertThat(value, label, ::check, preconditionBlock)
+    assertThat(value, label, ::check, preconditionBlock)
 
-private fun <T> assertThat(value: T, label: String, evaluate: EvaluationMethod, preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>): T =
-        preconditionBlock(PreconditionBlock()).let { Assertion(value, label, evaluate).run(it) }
-
-
-
-
+private fun <T> assertThat(
+    value: T,
+    label: String,
+    evaluate: EvaluationMethod,
+    preconditionBlock: PreconditionBlock<T>.() -> Precondition<T>
+): T = preconditionBlock(PreconditionBlock()).let { Assertion(value, label, evaluate).run(it) }

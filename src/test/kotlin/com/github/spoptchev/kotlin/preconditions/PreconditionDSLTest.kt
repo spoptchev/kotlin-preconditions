@@ -95,12 +95,24 @@ class PreconditionDSLTest {
         requireThat(value) { hasLengthBetween(1, 5) }
     }
 
-    @Test fun `test integration of all object preconditions`() {
+    @Test
+    fun `test integration of all object preconditions`() {
         val result = Result(true) { "" }
 
         requireThat(result) { not(isNull()) }
         requireThat(result) { isEqualTo(result) }
         requireThat(result) { isSameInstanceAs(result) }
+    }
+
+    @Test
+    fun `test nested preconditions`() {
+        requireThat("hello") {
+            not(isNull()) and {
+                hasLength(6) or {
+                    startsWith("he") and endsWith("llo")
+                }
+            }
+        }
     }
 
 }
