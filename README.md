@@ -14,15 +14,6 @@ checkThat(listOf(1, 2)) { contains(1) }
 requireThat(1) { isLt(2) }
 requireThat(listOf(1, 2)) { contains(1) }
 
-
-// nested preconditions
-val text: String? = "hello"
-
-requireThat(text) {
-    not(isNull()) and {
-        hasLength(6) or { startsWith("he") and endsWith("llo") }
-    }
-}
 ```
 
 If any of the preconditions are not met then `checkThat` will throw an
@@ -36,6 +27,15 @@ Compose your preconditions the way you like it:
 val list = listOf(1, 2)
 
 requireThat(list) { contains(3) or contains(1) and not(hasSize(3)) }
+
+// nested preconditions
+val text: String? = "hello"
+
+requireThat(text) {
+    not(isNull()) and {
+        hasLength(6) or { startsWith("he") and endsWith("llo") }
+    }
+}
 ```
 
 ### API Overview
